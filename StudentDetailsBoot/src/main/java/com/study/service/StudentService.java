@@ -3,11 +3,11 @@ package com.study.service;
 import java.util.List;
 import java.util.Optional;
 
-import javax.persistence.EntityNotFoundException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.study.exception.ResourceNotFoundException;
 import com.study.model.Student;
 import com.study.repository.StudentRepository;
 
@@ -26,13 +26,14 @@ public class StudentService {
 	}
 
 	public Student getStudentById(Long id) {
-		return studentRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("Student is not available"));
+		return studentRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Student","id",id));
 	}
 
 	public Student saveStudentDetails(Student student) {
 		return studentRepository.save(student);
 	}
 
+	@Transactional
 	public Student updateStudentDetails(Long id, Student studentDetails) {
 		Optional<Student> studentOptional = Optional.of(getStudentById(id));
 		if(studentOptional.isPresent()) {
@@ -47,12 +48,18 @@ public class StudentService {
 			return studentRepository.save(student);
 		}
 		else {
-			return null;
+			throw new ResourceNotFoundException("Student","id",id);
 		}
 	}
 
 	public void deleteStudentDetails(Long id) {
-		Student student = getStudentById(id);
-		studentRepository.delete(student);
+		Optional<Student> studentOptional = Optional.of(getStudentById(id));
+
+		if(studentOptional.isPresent()) {
+			studentRepository.deleteById(id);
+		}
+		else {
+			throw new ResourceNotFoundException("Student","id",id);
+		}
 	}
 }
