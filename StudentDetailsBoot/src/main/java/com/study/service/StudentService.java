@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,10 +37,8 @@ public class StudentService {
 
 	@Transactional
 	public Student updateStudentDetails(Long id, Student studentDetails) {
-		Optional<Student> studentOptional = Optional.of(getStudentById(id));
-		if(studentOptional.isPresent()) {
-			Student student = studentOptional.get();
-
+		try {
+			Student student = getStudentById(id);
 			if(studentDetails.getName()!=null)
 				student.setName(studentDetails.getName());
 
@@ -47,20 +46,17 @@ public class StudentService {
 				student.setSubject(studentDetails.getSubject());
 
 			return studentRepository.save(student);
-		}
-		else {
+
+		} catch (EmptyResultDataAccessException e) {
 			throw new ResourceNotFoundException("Student","id",id);
 		}
 	}
 
 	@Transactional
 	public void deleteStudentDetails(Long id) {
-		Optional<Student> studentOptional = Optional.of(getStudentById(id));
-
-		if(studentOptional.isPresent()) {
+		try {
 			studentRepository.deleteById(id);
-		}
-		else {
+		} catch (EmptyResultDataAccessException e) {
 			throw new ResourceNotFoundException("Student","id",id);
 		}
 	}
