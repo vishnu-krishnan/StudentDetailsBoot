@@ -29,6 +29,7 @@ public class StudentService {
 		return studentRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Student","id",id));
 	}
 
+	@Transactional
 	public Student saveStudentDetails(Student student) {
 		return studentRepository.save(student);
 	}
@@ -52,6 +53,7 @@ public class StudentService {
 		}
 	}
 
+	@Transactional
 	public void deleteStudentDetails(Long id) {
 		Optional<Student> studentOptional = Optional.of(getStudentById(id));
 
