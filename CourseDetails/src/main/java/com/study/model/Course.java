@@ -12,11 +12,11 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@Table(name="student")
+@Table(name="course")
 @Getter
 @Setter
 @ToString
-public class Student {
+public class Course {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -25,19 +25,19 @@ public class Student {
 	@Column(name = "name")
 	private String name;
 	
-	@Column(name = "batch")
-	private String batch;
+	@Column(name = "duration")
+	private String duration;
 	
-	public Student() {
+	public Course() {
 		//default
 	}
 
-	public Student(Long id, String name, String batch) {
+	public Course(Long id, String name, String duration) {
 		super();
-		System.out.println("student----- "+id+"  "+name+"  "+batch);
+		System.out.println("student----- "+id+"  "+name+"  "+duration);
 		this.id = id;
 		this.name = name;
-		this.batch = batch;
+		this.duration = duration;
 	}	
 	
 	
