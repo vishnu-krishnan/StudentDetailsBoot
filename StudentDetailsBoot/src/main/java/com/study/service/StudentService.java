@@ -42,8 +42,8 @@ public class StudentService {
 			if(studentDetails.getName()!=null)
 				student.setName(studentDetails.getName());
 
-			if(studentDetails.getSubject()!=null)
-				student.setSubject(studentDetails.getSubject());
+			if(studentDetails.getBatch()!=null)
+				student.setBatch(studentDetails.getBatch());
 
 			return studentRepository.save(student);
 
